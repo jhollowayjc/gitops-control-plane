@@ -1,0 +1,3 @@
+---
+repoUrl: 'https://github.com/jhollowayjc/gitops-control-plane'
+clusterName: 'kind'

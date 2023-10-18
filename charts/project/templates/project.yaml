@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: '{{ .Release.Name }}'
+spec:
+  sourceRepos:
+    - 'https://github.com/{{ .Values.githubOrg }}/{{ .Values.repo }}.git'
+  destinations:
+    - namespace: '{{ .Release.Name }}'
+      name: '*'
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+{{- if .Values.enableClusterRoleBinding }}
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+{{- end }}

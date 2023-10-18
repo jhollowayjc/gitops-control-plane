@@ -1,0 +1,33 @@
+# Using }}`}} to escape the templating used by appsets. 
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: projects 
+spec:
+  generators:
+  - git:
+      repoURL: {{ .Values.repoUrl }}
+      revision: {{ .Values.targetRevision }}
+      directories:
+      - path: "projects/*"
+      - path: projects/TEMPLATE
+        exclude: true
+  template:
+    metadata:
+      name: 'project-{{ `{{path.basename}}` }}'
+    spec:
+      project: default
+      source:
+        helm:
+          releaseName: '{{ `{{path.basename}}` }}'
+          valueFiles:
+          - '../../{{ `{{path}}` }}/values.yaml'
+        repoURL: {{ .Values.repoUrl }}
+        path: charts/project
+        targetRevision: {{ .Values.targetRevision }}
+      destination:
+        namespace: 'argocd'
+        name: 'in-cluster'
+      syncPolicy:
+        automated: {}

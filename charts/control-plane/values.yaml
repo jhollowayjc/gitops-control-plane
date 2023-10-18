@@ -1,0 +1,7 @@
+repoUrl: ''
+targetRevision: main
+clusterName: ''
+
+addons:
+  - argocd
+  - control-plane 

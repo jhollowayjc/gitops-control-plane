@@ -1,0 +1,32 @@
+# Using }}`}} to escape the templating used by appsets. 
+# https://argo-cd.readthedocs.io/en/latest/operator-manual/applicationset/Template/#deploying-applicationset-resources-as-part-of-a-helm-chart
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: '{{ .Release.Name }}-apps'
+spec:
+  generators:
+  - git:
+      repoURL: 'https://github.com/{{ .Values.githubOrg }}/{{ .Values.repo }}.git'
+      revision: HEAD
+      directories:
+        - path: env/{{ .Values.cluster }}/*
+        {{- range $exclude := .Values.excludes }}
+        - path: env/{{ .Values.cluster }}/{{ $exclude }}
+          exclude: true
+        {{- end }}
+  template:
+    metadata:
+      name: '{{ .Release.Name }}-{{ `{{path.basename}}` }}'
+    spec:
+      project: '{{ .Release.Name }}'
+      source:
+        repoURL: 'https://github.com/{{ .Values.githubOrg }}/{{ .Values.repo }}.git'
+        targetRevision: 'HEAD'
+        path: '{{`{{path}}`}}'
+      destination:
+        name: 'in-cluster'
+        namespace: '{{ .Release.Name }}-{{ `{{path.basename}}` }}'
+      syncPolicy:
+        automated: {}

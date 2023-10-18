@@ -1,0 +1,6 @@
+repoUrl: ''
+targetRevision: main
+clusterName: ''
+
+addons:
+  - argocd-bootstrap
