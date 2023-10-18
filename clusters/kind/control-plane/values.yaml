@@ -1,3 +1,8 @@
 ---
 repoUrl: 'https://github.com/jhollowayjc/gitops-control-plane'
 clusterName: 'kind'
+
+addons:
+  - argocd
+  - control-plane
+  - kyverno
