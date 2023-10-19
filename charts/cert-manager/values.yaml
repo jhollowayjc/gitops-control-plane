@@ -1,0 +1,104 @@
+serviceAccount:
+  create: false
+  name:
+  annotations:
+
+externalSecretName:
+region:
+
+global:
+  priorityClassName: "system-node-critical"
+
+cert-manager:
+  replicaCount: 3
+  installCRDs: true
+  tolerations:
+  - key: "critical-workloads"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 10
+        preference:
+          matchExpressions:
+          - key: WorkloadType
+            operator: In
+            values:
+            - critical-workloads
+  webhook:
+    replicaCount: 3
+    tolerations:
+    - key: "critical-workloads"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          preference:
+            matchExpressions:
+            - key: WorkloadType
+              operator: In
+              values:
+              - critical-workloads
+  cainjector:
+    replicaCount: 3
+    tolerations:
+    - key: "critical-workloads"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          preference:
+            matchExpressions:
+            - key: WorkloadType
+              operator: In
+              values:
+              - critical-workloads
+  startupapicheck:
+    tolerations:
+    - key: "critical-workloads"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 10
+          preference:
+            matchExpressions:
+            - key: WorkloadType
+              operator: In
+              values:
+              - critical-workloads
+
+cert-manager-csi-driver:
+  enabled: true
+  tolerations:
+  - key: "critical-workloads"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+  priorityClassName: "system-node-critical"
+
+cert-manager-trust:
+  replicaCount: 3
+
+cert-manager-istio-csr:
+  replicaCount: 3
+  app:
+    tls:
+      rootCAFile: "/var/run/secrets/istiod/ca/trust-bundle.pem"
+  volumeMounts:
+    - name: "trust-bundle"
+      mountPath: "/var/run/secrets/istiod/ca"
+  volumes:
+    - name: "trust-bundle"
+      configMap:
+        name: "root-ca-bundle"

@@ -4,4 +4,6 @@ clusterName: 'kind'
 
 addons:
   - argocd
+  - cert-manager
+  - external-secrets
   - kyverno

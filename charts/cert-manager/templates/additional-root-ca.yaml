@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: additional-root-ca
+data:
+  chain.pem: |

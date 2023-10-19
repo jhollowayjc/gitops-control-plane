@@ -1,2 +1,13 @@
 # external-secrets: {}
 # kyverno: {}
+
+cert-manager:
+  cert-manager-istio-csr:
+    app:
+      istio:
+        # cert manager needs to be aware of the available revisions so it can add dns alt names
+        # that match the dns record exposed for the istio revision; istiod-<rev>.istio-system.svc
+        # default is mostly legacy so that istiod.istio-system.svc is also added as a name
+        revisions:
+        - "default"
+        - "1-19-1"
