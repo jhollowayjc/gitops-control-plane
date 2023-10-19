@@ -4,5 +4,4 @@ clusterName: 'kind'
 
 addons:
   - argocd
-  - control-plane
   - kyverno

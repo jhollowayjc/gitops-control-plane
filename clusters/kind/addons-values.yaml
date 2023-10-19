@@ -1,7 +1,2 @@
-
-control-plane:
-  repoUrl: 'https://github.com/jhollowayjc/gitops-control-plane.git'
-  clusterName: 'kind'
-
 # external-secrets: {}
 # kyverno: {}

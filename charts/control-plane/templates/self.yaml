@@ -1,0 +1,23 @@
+# Using }}`}} to escape the templating used by appsets. 
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: control-plane
+spec:
+  project: default
+  source:
+    helm:
+      valueFiles:
+        - '../../clusters/{{ .Values.clusterName }}/control-plane/values.yaml'
+    repoURL: '{{ .Values.repoUrl }}'
+    path: 'charts/control-plane'
+    targetRevision: {{ .Values.targetRevision }} 
+  destination:
+    namespace: 'argocd'
+    name: 'in-cluster'
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true  # Big CRDs.
