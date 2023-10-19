@@ -6,15 +6,18 @@ metadata:
   name: addons
   namespace: argocd
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
   - list:
       elements:
       {{- range $addon := .Values.addons }}
-        - addonChart: {{ $addon }}
+        - name: {{ regexReplaceAll "\\W+" $addon "-" }}
+          path: {{ $addon }}
       {{- end }}
   template:
     metadata:
-      name: '{{ `{{addonChart}}` }}'
+      name: '{{ `{{.name}}` }}'
       namespace: argocd
     spec:
       project: default
@@ -22,13 +25,13 @@ spec:
         helm:
           valueFiles:
             - '../../clusters/{{ .Values.clusterName}}/addons-values.yaml'
-            - '../../clusters/{{ .Values.clusterName }}/{{ `{{addonChart}}` }}/values.yaml'
+            - '../../clusters/{{ .Values.clusterName }}/{{ `{{.path}}` }}/values.yaml'
           ignoreMissingValueFiles: true
         repoURL: '{{ .Values.repoUrl }}'
-        path: 'charts/{{ `{{addonChart}}` }}'
+        path: 'charts/{{ `{{.path}}` }}'
         targetRevision: {{ .Values.targetRevision }} 
       destination:
-        namespace: '{{ `{{addonChart}}` }}'
+        namespace: '{{ `{{.name}}` }}'
         name: 'in-cluster'
       syncPolicy:
         automated: {}
