@@ -3,7 +3,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: projects 
+  name: projects
+  namespace: argocd
 spec:
   generators:
   - git:
@@ -20,6 +21,7 @@ spec:
   template:
     metadata:
       name: 'project-{{ `{{path.basename}}` }}'
+      namespace: argocd
     spec:
       project: default
       source:

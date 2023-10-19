@@ -4,6 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: addons
+  namespace: argocd
 spec:
   generators:
   - list:
@@ -13,7 +14,8 @@ spec:
       {{- end }}
   template:
     metadata:
-      name: 'addon-{{ `{{addonChart}}` }}'
+      name: '{{ `{{addonChart}}` }}'
+      namespace: argocd
     spec:
       project: default
       source:
