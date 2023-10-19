@@ -1,7 +1,11 @@
 repoUrl: ''
 targetRevision: main
+
 clusterName: ''
 
 addons:
   - argocd
-  - control-plane 
+  - control-plane
+
+# list of projects found under projects/* to exclude
+excludeProjects: {}

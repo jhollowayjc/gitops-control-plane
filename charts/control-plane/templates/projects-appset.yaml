@@ -13,6 +13,10 @@ spec:
       - path: "projects/*"
       - path: projects/TEMPLATE
         exclude: true
+      {{- range $exclude := .Values.excludeProjects }}
+      - path: projects/{{ $exclude }}
+        exclude: true
+      {{- end }}
   template:
     metadata:
       name: 'project-{{ `{{path.basename}}` }}'
@@ -23,6 +27,9 @@ spec:
           releaseName: '{{ `{{path.basename}}` }}'
           valueFiles:
           - '../../{{ `{{path}}` }}/values.yaml'
+          parameters:
+            - name: 'cluster'
+              value: {{ .Values.clusterName }}
         repoURL: {{ .Values.repoUrl }}
         path: charts/project
         targetRevision: {{ .Values.targetRevision }}
