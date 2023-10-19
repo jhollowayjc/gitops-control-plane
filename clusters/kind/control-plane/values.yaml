@@ -6,4 +6,6 @@ addons:
   - argocd
   - cert-manager
   - external-secrets
+  - istio/system
+  - istio/istiod-1-19-1
   - kyverno
